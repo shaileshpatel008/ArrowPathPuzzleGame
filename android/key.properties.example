@@ -1,0 +1,19 @@
+# Release signing for Google Play (upload key).
+#
+# 1. Copy this file to android/key.properties  (same folder)
+#      cp android/key.properties.example android/key.properties
+# 2. Replace the values below with your own.
+# 3. Build:  flutter build appbundle --release
+#
+# android/key.properties is git-ignored: never commit it or the .jks file.
+#
+# Rules for this file:
+#  - one "key=value" per line, no quotes
+#  - no spaces at the END of a line (they become part of the value)
+#  - spaces inside the path are fine, no backslashes needed
+#  - storeFile should be an absolute path to your .jks
+
+storePassword=YOUR_KEYSTORE_PASSWORD
+keyPassword=YOUR_KEY_PASSWORD
+keyAlias=upload
+storeFile=/Users/YOUR_MAC_USER/path/to/your-upload-keystore.jks

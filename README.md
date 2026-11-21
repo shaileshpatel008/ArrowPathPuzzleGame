@@ -119,7 +119,7 @@ keytool -genkey -v -keystore ~/upload-keystore.jks -keyalg RSA \
   -keysize 2048 -validity 10000 -alias upload
 ```
 
-Create `android/key.properties` (git-ignored):
+Copy `android/key.properties.example` to `android/key.properties` (git-ignored) and fill it in:
 ```
 storePassword=***
 keyPassword=***
