@@ -357,67 +357,71 @@ class _DailyCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final p = context.pal;
-    final solved = controller.progress.solvedToday;
-    return AppCard(
-      onTap: controller.playDaily,
-      semanticLabel: 'daily_challenge'.tr,
-      child: Row(
-        children: [
-          IconBadge(
-            icon: solved ? Icons.check_rounded : Icons.calendar_month_rounded,
-            color: solved ? p.successText : p.accentText,
-            background: solved ? p.successSoft : p.accentSoft,
-            size: 52,
-          ),
-          const SizedBox(width: 14),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text('daily_challenge'.tr, style: context.text.titleMedium),
-                const SizedBox(height: 3),
-                Text(
-                  'daily_meta'.trParams({'size': '${LevelCatalog.dailySize}'}),
-                  style: context.text.bodyMedium?.copyWith(fontSize: 13),
-                ),
-                const SizedBox(height: 3),
-                Obx(
-                  () => Text(
+    // The whole card is reactive. Both observables are read up front, so
+    // the Obx always has something to track (GetX throws "improper use"
+    // otherwise) and the card flips to "Solved" right after you solve it.
+    return Obx(() {
+      final solved = controller.progress.solvedToday;
+      final resetsIn = controller.resetsIn.value;
+      return AppCard(
+        onTap: controller.playDaily,
+        semanticLabel: 'daily_challenge'.tr,
+        child: Row(
+          children: [
+            IconBadge(
+              icon: solved ? Icons.check_rounded : Icons.calendar_month_rounded,
+              color: solved ? p.successText : p.accentText,
+              background: solved ? p.successSoft : p.accentSoft,
+              size: 52,
+            ),
+            const SizedBox(width: 14),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text('daily_challenge'.tr, style: context.text.titleMedium),
+                  const SizedBox(height: 3),
+                  Text(
+                    'daily_meta'.trParams({
+                      'size': '${LevelCatalog.dailySize}',
+                    }),
+                    style: context.text.bodyMedium?.copyWith(fontSize: 13),
+                  ),
+                  const SizedBox(height: 3),
+                  Text(
                     solved
                         ? 'daily_done_today'.tr
-                        : 'resets_in'.trParams({
-                            't': controller.resetsIn.value,
-                          }),
+                        : 'resets_in'.trParams({'t': resetsIn}),
                     style: TextStyle(
                       fontSize: 12,
                       fontWeight: FontWeight.w600,
                       color: solved ? p.successText : p.accentText,
                     ),
                   ),
-                ),
-              ],
-            ),
-          ),
-          Container(
-            height: 38,
-            padding: const EdgeInsets.symmetric(horizontal: 16),
-            alignment: Alignment.center,
-            decoration: BoxDecoration(
-              color: p.contrastSurface,
-              borderRadius: BorderRadius.circular(12),
-            ),
-            child: Text(
-              solved ? 'view'.tr : 'play'.tr,
-              style: TextStyle(
-                color: p.onContrast,
-                fontWeight: FontWeight.w600,
-                fontSize: 14,
+                ],
               ),
             ),
-          ),
-        ],
-      ),
-    );
+            Container(
+              height: 38,
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              alignment: Alignment.center,
+              decoration: BoxDecoration(
+                color: p.contrastSurface,
+                borderRadius: BorderRadius.circular(12),
+              ),
+              child: Text(
+                solved ? 'view'.tr : 'play'.tr,
+                style: TextStyle(
+                  color: p.onContrast,
+                  fontWeight: FontWeight.w600,
+                  fontSize: 14,
+                ),
+              ),
+            ),
+          ],
+        ),
+      );
+    });
   }
 }
 
