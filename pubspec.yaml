@@ -1,0 +1,86 @@
+name: arrowpathpuzzle
+description: "Arrow Path Puzzle - tap the arrows, find the right order, clear the board."
+publish_to: 'none'
+
+# Bump the build number (+N) for every Play Console upload.
+version: 1.0.0+1
+
+environment:
+  sdk: ^3.14.0
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+  # State management, routing, dependency injection
+  get: ^4.7.3
+  get_storage: ^2.1.1
+
+  # Monetisation
+  google_mobile_ads: ^9.2.0
+  in_app_purchase: ^3.3.1
+  in_app_purchase_android: ^0.5.5
+
+  # Experience
+  audioplayers: ^6.8.1
+  flutter_animate: ^4.5.2
+
+  # Platform helpers
+  url_launcher: ^6.3.3
+  package_info_plus: ^10.2.2
+  in_app_review: ^2.0.12
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^6.0.0
+  flutter_launcher_icons: ^0.14.4
+  flutter_native_splash: ^2.4.8
+
+flutter:
+  uses-material-design: true
+
+  assets:
+    - assets/audio/
+    - assets/branding/
+
+  fonts:
+    - family: Inter
+      fonts:
+        - asset: assets/fonts/Inter-400.ttf
+          weight: 400
+        - asset: assets/fonts/Inter-500.ttf
+          weight: 500
+        - asset: assets/fonts/Inter-600.ttf
+          weight: 600
+        - asset: assets/fonts/Inter-700.ttf
+          weight: 700
+    - family: SpaceGrotesk
+      fonts:
+        - asset: assets/fonts/SpaceGrotesk-500.ttf
+          weight: 500
+        - asset: assets/fonts/SpaceGrotesk-600.ttf
+          weight: 600
+        - asset: assets/fonts/SpaceGrotesk-700.ttf
+          weight: 700
+
+# dart run flutter_launcher_icons
+flutter_launcher_icons:
+  android: "ic_launcher"
+  ios: true
+  remove_alpha_ios: true
+  image_path: "assets/branding/app_icon.png"
+  adaptive_icon_background: "#10131C"
+  adaptive_icon_foreground: "assets/branding/app_icon_foreground.png"
+  min_sdk_android: 24
+
+# dart run flutter_native_splash:create
+flutter_native_splash:
+  color: "#10131C"
+  image: assets/branding/splash_logo.png
+  android_12:
+    color: "#10131C"
+    image: assets/branding/splash_logo.png
+  ios: true
+  android: true
+  web: false

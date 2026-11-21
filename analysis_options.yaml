@@ -1,0 +1,32 @@
+include: package:flutter_lints/flutter.yaml
+
+analyzer:
+  exclude:
+    - build/**
+    - android/**
+    - ios/**
+  errors:
+    # Flutter 3.47+ marks `package:flutter/material.dart` as deprecated in
+    # favour of `package:material_ui`. GetX (GetMaterialApp, bottom sheets,
+    # snackbars) is still built on the SDK Material library, so the app keeps
+    # using it until GetX migrates. Mixing both libraries would break Theme
+    # look-ups. Remove this line once the migration happens.
+    deprecated_member_use: ignore
+  language:
+    strict-casts: true
+    strict-raw-types: true
+
+linter:
+  rules:
+    - always_declare_return_types
+    - avoid_print
+    - avoid_redundant_argument_values
+    - avoid_unnecessary_containers
+    - prefer_const_constructors
+    - prefer_const_declarations
+    - prefer_final_fields
+    - prefer_final_locals
+    - prefer_single_quotes
+    - sort_child_properties_last
+    - unawaited_futures
+    - use_super_parameters
