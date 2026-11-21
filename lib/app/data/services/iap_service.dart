@@ -71,15 +71,16 @@ class IapService extends GetxService {
     try {
       _sub = _iap.purchaseStream.listen(
         _onPurchases,
-        onError: (Object e) => debugPrint('purchaseStream: $e'),
+        onError: (Object e) => debugPrint('[IAP] purchase stream error: $e'),
       );
       available.value = await _iap.isAvailable();
+      debugPrint('[IAP] Google Play Billing available: ${available.value}');
       if (available.value) {
         await loadProducts();
         await refreshEntitlements();
       }
     } catch (e) {
-      debugPrint('IAP init failed: $e');
+      debugPrint('[IAP] init failed: $e');
       available.value = false;
     } finally {
       loading.value = false;
@@ -90,10 +91,13 @@ class IapService extends GetxService {
   Future<void> loadProducts() async {
     final response = await _iap.queryProductDetails(IapConfig.all);
     if (response.error != null) {
-      debugPrint('Product query: ${response.error!.message}');
+      debugPrint('[IAP] product query error: ${response.error!.message}');
     }
     if (response.notFoundIDs.isNotEmpty) {
-      debugPrint('Products not found in the store: ${response.notFoundIDs}');
+      debugPrint(
+        '[IAP] NOT FOUND in Play Console (check IDs / activation): '
+        '${response.notFoundIDs}',
+      );
     }
     final map = <String, ProductDetails>{};
     for (final p in response.productDetails) {
@@ -105,6 +109,10 @@ class IapService extends GetxService {
       }
     }
     products.assignAll(map);
+    debugPrint(
+      '[IAP] products loaded: '
+      '${map.values.map((p) => '${p.id}=${p.price}').join(', ')}',
+    );
   }
 
   bool _isBasePlan(ProductDetails p) {
@@ -173,7 +181,7 @@ class IapService extends GetxService {
         .getPlatformAddition<InAppPurchaseAndroidPlatformAddition>();
     final response = await addition.queryPastPurchases();
     if (response.error != null) {
-      debugPrint('queryPastPurchases: ${response.error!.message}');
+      debugPrint('[IAP] owned items query error: ${response.error!.message}');
       return; // keep cached entitlements when offline
     }
     var theme = false;
@@ -206,6 +214,7 @@ class IapService extends GetxService {
 
   Future<void> _onPurchases(List<PurchaseDetails> purchases) async {
     for (final p in purchases) {
+      debugPrint('[IAP] ${p.productID}: ${p.status.name}');
       switch (p.status) {
         case PurchaseStatus.pending:
           _events.add(PurchasePending(p.productID));
@@ -228,7 +237,7 @@ class IapService extends GetxService {
         try {
           await _iap.completePurchase(p);
         } catch (e) {
-          debugPrint('completePurchase: $e');
+          debugPrint('[IAP] acknowledge failed: $e');
         }
       }
     }
