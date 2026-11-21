@@ -38,6 +38,17 @@ class AdsService extends GetxService {
   bool _loadingInterstitial = false;
   bool _loadingRewarded = false;
   int _retry = 0;
+  bool _starting = false;
+
+  /// True when consent status could not be determined (e.g. Google's test
+  /// App ID, no consent message configured yet, or offline). Ads are then
+  /// requested as non-personalised, which is the safe default.
+  bool _nonPersonalized = false;
+
+  /// The request used for every ad format (banner included).
+  AdRequest get request => _nonPersonalized
+      ? const AdRequest(nonPersonalizedAds: true)
+      : const AdRequest();
 
   /// Ads may be shown to this player right now.
   bool get eligible =>
@@ -52,27 +63,48 @@ class AdsService extends GetxService {
 
   Future<void> _maybeStart() async {
     if (!eligible) {
+      if (sdkReady.value) _log('not eligible any more (Plus or reset)');
       _disposeAds();
       return;
     }
-    if (sdkReady.value) return;
-    final allowed = await _consent.gather();
-    if (!allowed || sdkReady.value) return;
-    await MobileAds.instance.initialize();
-    await MobileAds.instance.updateRequestConfiguration(
-      RequestConfiguration(
-        // The game is rated for everyone; keep ad content family friendly.
-        maxAdContentRating: MaxAdContentRating.pg,
-        testDeviceIds: AdConfig.testDeviceIds,
-      ),
-    );
-    sdkReady.value = true;
-    _loadInterstitial();
-    _loadRewarded();
+    if (sdkReady.value || _starting) return;
+    _starting = true;
+    try {
+      _log(
+        'eligible (level ${_progress.highestCleared.value}), checking consent',
+      );
+      final allowed = await _consent.gather();
+      if (!allowed && !_consent.updateFailed.value) {
+        // The player has not given (or is still being asked for) consent.
+        _log('consent does not allow ads yet');
+        return;
+      }
+      _nonPersonalized = !allowed;
+      if (_nonPersonalized) {
+        _log('consent status unknown, using non-personalised ads');
+      }
+      await MobileAds.instance.initialize();
+      await MobileAds.instance.updateRequestConfiguration(
+        RequestConfiguration(
+          // The game is rated for everyone; keep ad content family friendly.
+          maxAdContentRating: MaxAdContentRating.pg,
+          testDeviceIds: AdConfig.testDeviceIds,
+        ),
+      );
+      sdkReady.value = true;
+      _log('SDK ready, loading interstitial + rewarded');
+      _loadInterstitial();
+      _loadRewarded();
+    } catch (e) {
+      _log('start failed: $e');
+    } finally {
+      _starting = false;
+    }
   }
 
-  bool get _canLoad =>
-      sdkReady.value && eligible && _consent.canRequestAds.value;
+  bool get _canLoad => sdkReady.value && eligible;
+
+  void _log(String message) => debugPrint('[Ads] $message');
 
   // ----- Interstitial ---------------------------------------------------------
 
@@ -81,16 +113,17 @@ class AdsService extends GetxService {
     _loadingInterstitial = true;
     InterstitialAd.load(
       adUnitId: AdConfig.interstitial,
-      request: const AdRequest(),
+      request: request,
       adLoadCallback: InterstitialAdLoadCallback(
         onAdLoaded: (ad) {
+          _log('interstitial loaded');
           _loadingInterstitial = false;
           _retry = 0;
           _interstitial = ad;
         },
         onAdFailedToLoad: (error) {
           _loadingInterstitial = false;
-          debugPrint('Interstitial failed: ${error.message}');
+          _log('interstitial failed to load: ${error.message}');
           _scheduleRetry(_loadInterstitial);
         },
       ),
@@ -108,6 +141,10 @@ class AdsService extends GetxService {
         DateTime.now().difference(_lastInterstitial!) >=
             AdConfig.interstitialMinGap;
     final ad = _interstitial;
+    _log(
+      'level won: $count/${AdConfig.interstitialEveryLevels} towards next '
+      'interstitial (gap ok: $gapOk, loaded: ${ad != null})',
+    );
     if (count < AdConfig.interstitialEveryLevels || !gapOk || ad == null) {
       _loadInterstitial();
       return;
@@ -138,9 +175,10 @@ class AdsService extends GetxService {
     _loadingRewarded = true;
     RewardedAd.load(
       adUnitId: AdConfig.rewarded,
-      request: const AdRequest(),
+      request: request,
       rewardedAdLoadCallback: RewardedAdLoadCallback(
         onAdLoaded: (ad) {
+          _log('rewarded loaded');
           _loadingRewarded = false;
           _rewarded = ad;
           rewardedReady.value = true;
@@ -148,7 +186,7 @@ class AdsService extends GetxService {
         onAdFailedToLoad: (error) {
           _loadingRewarded = false;
           rewardedReady.value = false;
-          debugPrint('Rewarded failed: ${error.message}');
+          _log('rewarded failed to load: ${error.message}');
           _scheduleRetry(_loadRewarded);
         },
       ),

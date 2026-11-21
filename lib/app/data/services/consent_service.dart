@@ -17,6 +17,10 @@ class ConsentService extends GetxService {
   /// when a consent form was used).
   final privacyOptionsRequired = false.obs;
 
+  /// The consent status could not be fetched (Google's test App ID with no
+  /// consent message, AdMob not set up yet, or offline).
+  final updateFailed = false.obs;
+
   Future<bool>? _gathering;
 
   /// Requests consent info and shows the form if needed. Safe to call many
@@ -29,13 +33,15 @@ class ConsentService extends GetxService {
     ConsentInformation.instance.requestConsentInfoUpdate(
       ConsentRequestParameters(),
       () async {
+        updateFailed.value = false;
         await ConsentForm.loadAndShowConsentFormIfRequired((FormError? error) {
           if (error != null) debugPrint('Consent form: ${error.message}');
           if (!done.isCompleted) done.complete();
         });
       },
       (FormError error) {
-        debugPrint('Consent info: ${error.message}');
+        debugPrint('[Ads] consent info failed: ${error.message}');
+        updateFailed.value = true;
         if (!done.isCompleted) done.complete();
       },
     );

@@ -37,7 +37,7 @@ class _AdBannerState extends State<AdBanner> {
     _banner = BannerAd(
       adUnitId: AdConfig.banner,
       size: size,
-      request: const AdRequest(),
+      request: _ads.request,
       listener: BannerAdListener(
         onAdLoaded: (_) => mounted ? setState(() => _loaded = true) : null,
         onAdFailedToLoad: (ad, error) {

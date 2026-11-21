@@ -75,6 +75,16 @@ you replace the `XXXX` placeholders, so you can't get an invalid-traffic strike 
 | Level 16+ (free player) | interstitial after every 3rd **won** level (≥ 90 s apart, never after a loss, never mid-level) · optional rewarded ads (+1 hint / +1 heart) · banner on the Levels list only |
 | Plus member | no ads |
 
+With the defaults, the first interstitial appears when you leave the win
+screen of **level 18** (levels 16, 17, 18 = 3 wins; level 15's win shows the
+one-time Plus offer instead). The banner shows on the Levels tab as soon as
+level 15 is cleared. Run `flutter run` and look for `[Ads]` lines in the
+console to see consent, loading and the interstitial counter.
+
+If the consent check fails (always the case with Google's *test* App ID,
+or before you publish a consent message in AdMob), ads are still served
+but as **non-personalised** ads.
+
 ## 4. Google Play Billing setup
 
 Play Console › your app › **Monetize › Products**
