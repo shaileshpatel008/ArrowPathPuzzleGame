@@ -63,8 +63,12 @@ android {
             } else {
                 signingConfigs.getByName("debug")
             }
-            isMinifyEnabled = true
-            isShrinkResources = true
+            // R8 code shrinking is off: several plugins (ads, billing, JNI
+            // based path_provider) rely on classes found by name at runtime,
+            // and shrinking them away makes the release app close on launch.
+            // The size saving is small for this app.
+            isMinifyEnabled = false
+            isShrinkResources = false
         }
     }
 }

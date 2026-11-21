@@ -4,7 +4,7 @@ Tap the arrows, find the right order and clear the board.
 Flutter + GetX, AdMob (with UMP consent) and Google Play Billing.
 
 - **Package:** `com.shaileshpatel008.arrowpathpuzzle`
-- **Flutter:** 3.50 stable · **Dart:** 3.14 · **minSdk:** 24 · **targetSdk:** Flutter default (latest)
+- **Flutter:** 3.47 or newer (built and tested on 3.50.1) · **Dart:** 3.13+ · **minSdk:** 24 · **targetSdk:** Flutter default (latest)
 
 ---
 
