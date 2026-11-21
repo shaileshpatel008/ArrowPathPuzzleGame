@@ -63,25 +63,25 @@ class AdsService extends GetxService {
 
   Future<void> _maybeStart() async {
     if (!eligible) {
-      if (sdkReady.value) _log('not eligible any more (Plus or reset)');
+      if (sdkReady.value) log('not eligible any more (Plus or reset)');
       _disposeAds();
       return;
     }
     if (sdkReady.value || _starting) return;
     _starting = true;
     try {
-      _log(
+      log(
         'eligible (level ${_progress.highestCleared.value}), checking consent',
       );
       final allowed = await _consent.gather();
       if (!allowed && !_consent.updateFailed.value) {
         // The player has not given (or is still being asked for) consent.
-        _log('consent does not allow ads yet');
+        log('consent does not allow ads yet');
         return;
       }
       _nonPersonalized = !allowed;
       if (_nonPersonalized) {
-        _log('consent status unknown, using non-personalised ads');
+        log('consent status unknown, using non-personalised ads');
       }
       await MobileAds.instance.initialize();
       await MobileAds.instance.updateRequestConfiguration(
@@ -92,11 +92,11 @@ class AdsService extends GetxService {
         ),
       );
       sdkReady.value = true;
-      _log('SDK ready, loading interstitial + rewarded');
+      log('SDK ready, loading interstitial + rewarded');
       _loadInterstitial();
       _loadRewarded();
     } catch (e) {
-      _log('start failed: $e');
+      log('start failed: $e');
     } finally {
       _starting = false;
     }
@@ -104,7 +104,7 @@ class AdsService extends GetxService {
 
   bool get _canLoad => sdkReady.value && eligible;
 
-  void _log(String message) => debugPrint('[Ads] $message');
+  void log(String message) => debugPrint('[Ads] $message');
 
   // ----- Interstitial ---------------------------------------------------------
 
@@ -116,14 +116,14 @@ class AdsService extends GetxService {
       request: request,
       adLoadCallback: InterstitialAdLoadCallback(
         onAdLoaded: (ad) {
-          _log('interstitial loaded');
+          log('interstitial loaded');
           _loadingInterstitial = false;
           _retry = 0;
           _interstitial = ad;
         },
         onAdFailedToLoad: (error) {
           _loadingInterstitial = false;
-          _log('interstitial failed to load: ${error.message}');
+          log('interstitial failed to load: ${error.message}');
           _scheduleRetry(_loadInterstitial);
         },
       ),
@@ -141,7 +141,7 @@ class AdsService extends GetxService {
         DateTime.now().difference(_lastInterstitial!) >=
             AdConfig.interstitialMinGap;
     final ad = _interstitial;
-    _log(
+    log(
       'level won: $count/${AdConfig.interstitialEveryLevels} towards next '
       'interstitial (gap ok: $gapOk, loaded: ${ad != null})',
     );
@@ -178,7 +178,7 @@ class AdsService extends GetxService {
       request: request,
       rewardedAdLoadCallback: RewardedAdLoadCallback(
         onAdLoaded: (ad) {
-          _log('rewarded loaded');
+          log('rewarded loaded');
           _loadingRewarded = false;
           _rewarded = ad;
           rewardedReady.value = true;
@@ -186,7 +186,7 @@ class AdsService extends GetxService {
         onAdFailedToLoad: (error) {
           _loadingRewarded = false;
           rewardedReady.value = false;
-          _log('rewarded failed to load: ${error.message}');
+          log('rewarded failed to load: ${error.message}');
           _scheduleRetry(_loadRewarded);
         },
       ),
