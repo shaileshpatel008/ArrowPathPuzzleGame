@@ -71,14 +71,16 @@ you replace the `XXXX` placeholders, so you can't get an invalid-traffic strike 
 
 | Player | Ads |
 |---|---|
-| Levels 1-15 | none at all |
-| Level 16+ (free player) | interstitial after every 3rd **won** level (≥ 90 s apart, never after a loss, never mid-level) · optional rewarded ads (+1 hint / +1 heart) · banner on the Levels list only |
+| Levels 1-5 | none at all |
+| Level 6+ (free player) | interstitial after every 3rd **won** level (≥ 90 s apart, never after a loss, never mid-level) · optional rewarded ads (+1 hint / +1 heart) · banner on the Levels list only |
 | Plus member | no ads |
 
 With the defaults, the first interstitial appears when you leave the win
-screen of **level 18** (levels 16, 17, 18 = 3 wins; level 15's win shows the
-one-time Plus offer instead). The banner shows on the Levels tab as soon as
-level 15 is cleared. Run `flutter run` and look for `[Ads]` lines in the
+screen of **level 7** (levels 5, 6, 7 = 3 wins counted once ads switch on at
+level 5). The banner shows on the Levels tab as soon as level 5 is cleared.
+Level 15's win shows the one-time Plus offer instead of an ad.
+Change `AppConfig.freeLevelsWithoutAds` to move the start. Run
+`flutter run` and look for `[Ads]` lines in the
 console to see consent, loading and the interstitial counter.
 
 If the consent check fails (always the case with Google's *test* App ID,

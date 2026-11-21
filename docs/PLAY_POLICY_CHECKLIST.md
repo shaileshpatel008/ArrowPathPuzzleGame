@@ -7,7 +7,7 @@
 - ✅ **Ads consent (GDPR / US states)**: Google UMP via `ConsentService`; no ad
   request before consent allows it; "Privacy & ad choices" in Settings when required.
 - ✅ **Ad content rating** capped at **PG** (`MaxAdContentRating.pg`).
-- ✅ **Ad placement**: no ads in levels 1-15, no interstitials mid-game, after a
+- ✅ **Ad placement**: no ads in levels 1-5, no interstitials mid-game, after a
   loss or on app open/exit, frequency capped; rewarded ads are optional and
   state the reward up front; banner never overlaps game controls.
 - ✅ **Test ads** in every debug build (no invalid-traffic risk).

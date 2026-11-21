@@ -38,7 +38,7 @@ abstract final class AppConfig {
   static const totalLevels = 200;
 
   /// Levels 1..[freeLevelsWithoutAds] never show ads or sales prompts.
-  static const freeLevelsWithoutAds = 15;
+  static const freeLevelsWithoutAds = 5;
 
   /// The one-time Plus offer appears after this level is cleared.
   static const plusOfferAfterLevel = 15;
