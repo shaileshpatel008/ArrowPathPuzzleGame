@@ -8,12 +8,13 @@ abstract final class AppConfig {
   static const plusName = 'Arrow Path Plus';
   static const packageName = 'com.shaileshpatel008.arrowpathpuzzle';
 
-  // TODO(before release): host the documents in /docs and put the URLs here.
-  // Google Play requires a working privacy policy link inside the app and on
-  // the store listing because the app uses ads and in-app purchases.
-  static const privacyPolicyUrl = 'https://example.com/arrow-path/privacy';
-  static const termsUrl = 'https://example.com/arrow-path/terms';
-  static const supportEmail = 'support@example.com';
+  // Hosted with GitHub Pages from the /docs folder of the repository.
+  // Use the same privacy policy URL in Play Console (App content).
+  static const privacyPolicyUrl =
+      'https://shaileshpatel008.github.io/ArrowPathPuzzleGame/privacy.html';
+  static const termsUrl =
+      'https://shaileshpatel008.github.io/ArrowPathPuzzleGame/terms.html';
+  static const supportEmail = 'shaiileshrpatel008@gmail.com';
 
   static const playStoreUrl =
       'https://play.google.com/store/apps/details?id=$packageName';

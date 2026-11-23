@@ -27,9 +27,10 @@
 - ✅ **No sensitive permissions**: only INTERNET (+ AD_ID / BILLING merged by SDKs).
 
 ## You do in consoles
-- ☐ Host `docs/PRIVACY_POLICY.md` and `docs/TERMS.md` (GitHub Pages, Google
-  Sites…), fill in the placeholders, and put the URLs in `config/app_config.dart`
-  **and** in Play Console › App content › Privacy policy.
+- ✅ Privacy policy and terms are published with GitHub Pages from `docs/`
+  (`privacy.html`, `terms.html`) and linked in `config/app_config.dart`.
+- ☐ Paste https://shaileshpatel008.github.io/ArrowPathPuzzleGame/privacy.html
+  into Play Console › App content › Privacy policy.
 - ☐ Replace the AdMob test App ID and unit IDs (README §3).
 - ☐ AdMob › Privacy & messaging: publish the GDPR + US states messages.
 - ☐ Create the 7 products (README §4).

@@ -48,7 +48,7 @@ lib/
    │  └─ daily  themes  stats  settings  store  plus
    └─ routes/                     # app_routes.dart + app_pages.dart
 assets/  audio (generated SFX + music loop) · branding (icon, splash) · fonts (OFL)
-docs/    Play policy checklist, privacy policy & terms templates
+docs/    Play policy checklist + GitHub Pages site (privacy.html, terms.html)
 store_listing/  512px icon, 1024x500 feature graphic, listing texts
 ```
 
