@@ -12,6 +12,7 @@ import '../data/services/platform_service.dart';
 import '../data/services/progress_service.dart';
 import '../data/services/settings_service.dart';
 import '../data/services/storage_service.dart';
+import '../data/services/update_service.dart';
 import '../data/services/wallet_service.dart';
 import '../modules/store/purchase_feedback.dart';
 
@@ -49,6 +50,9 @@ abstract final class InitialBinding {
 
     Get.put(PurchaseFeedback(iap), permanent: true);
     Get.put(LifecycleService(wallet, progress), permanent: true);
+    _guard('updates', () {
+      Get.put(UpdateService(storage), permanent: true);
+    });
   }
 
   static void _background(String name, Future<Object?> Function() task) {

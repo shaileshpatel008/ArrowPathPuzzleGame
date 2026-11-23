@@ -47,6 +47,13 @@ abstract final class AppConfig {
   /// Ask for a Play review after these levels are cleared (once each).
   static const reviewPromptLevels = [10, 40];
 
+  /// In-app updates: after "Later", don't ask again for this long.
+  static const updatePromptCooldown = Duration(hours: 24);
+
+  /// In-app updates: players this many days behind get Play's full-screen
+  /// (immediate) update instead of the optional one.
+  static const forceUpdateAfterDays = 7;
+
   /// Daily challenge days needed in one month for the monthly badge.
   static const monthlyBadgeTarget = 20;
 }

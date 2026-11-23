@@ -24,6 +24,7 @@ abstract final class StorageKeys {
   static const plusOfferShown = 'progress.plusOfferShown';
   static const reviewAsked = 'progress.reviewAsked';
   static const levelsSinceInterstitial = 'ads.levelsSinceInterstitial';
+  static const updatePromptAt = 'update.promptAt';
 
   // daily
   static const dailySolved = 'daily.solved';

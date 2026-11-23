@@ -277,6 +277,17 @@ const Map<String, String> enUS = {
   'purchase_pending':
       'Payment pending. We will add your item as soon as it clears.',
 
+  // In-app updates
+  'update_title': 'New update available',
+  'update_body': 'A new version of Arrow Path is ready with improvements and fixes. It downloads in the background while you play.',
+  'update_now': 'Update now',
+  'later': 'Later',
+  'update_ready_title': 'Update ready',
+  'update_ready_body':
+      'Restart the game to finish installing. Your progress is saved.',
+  'restart_now': 'Restart now',
+  'update_downloading': 'Downloading the update… keep playing!',
+
   // Plus
   'plus_tagline': 'More hints, every theme, no ads.',
   'plus_member_sub': 'Thanks for supporting the game!',

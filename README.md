@@ -114,6 +114,23 @@ and owned items and subscriptions are re-read from Play on every launch.
 **Before you scale:** replace `LocalPurchaseVerifier` with server-side
 verification (Google Play Developer API). See `purchase_verifier.dart`.
 
+## 4b. In-app updates (Google Play)
+
+`lib/app/data/services/update_service.dart` uses Google Play In-App Updates:
+
+- **Normal update:** on the Home/tabs screen a sheet offers *Update now*.
+  Play downloads it in the background, then the app offers *Restart now*.
+  *Later* snoozes the offer for 24 h (`AppConfig.updatePromptCooldown`).
+- **Old version:** if the installed version is 7+ days out of date
+  (`AppConfig.forceUpdateAfterDays`), Play's full-screen update opens.
+- Never shown during a level. Logs start with `[Update]`.
+
+**How to test:** it only works for builds installed from Google Play.
+1. Install the current version from your internal testing link.
+2. Bump `version:` (e.g. `1.0.3+4` → `1.0.4+5`), build and upload a new release.
+3. Wait until Play shows the new version (open the Play Store page for the app
+   once to refresh its cache), then open the installed app and go to Home.
+
 ## 5. Release build
 
 ```bash
