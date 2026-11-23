@@ -13,10 +13,10 @@ import 'package:flutter/foundation.dart';
 ///       (com.google.android.gms.ads.APPLICATION_ID)
 ///   * ios/Runner/Info.plist (GADApplicationIdentifier)
 abstract final class AdConfig {
-  // TODO(before release): paste your AdMob ad unit IDs here.
-  static const _androidBanner = 'ca-app-pub-XXXXXXXXXXXXXXXX/BBBBBBBBBB';
-  static const _androidInterstitial = 'ca-app-pub-XXXXXXXXXXXXXXXX/IIIIIIIIII';
-  static const _androidRewarded = 'ca-app-pub-XXXXXXXXXXXXXXXX/RRRRRRRRRR';
+  // AdMob ad unit IDs (AdMob › Apps › Arrow Path Puzzle › Ad units).
+  static const _androidBanner = 'ca-app-pub-7616025727863605/2128825410';
+  static const _androidInterstitial = 'ca-app-pub-7616025727863605/5096614586';
+  static const _androidRewarded = 'ca-app-pub-7616025727863605/1620404007';
 
   static const _iosBanner = 'ca-app-pub-XXXXXXXXXXXXXXXX/BBBBBBBBBB';
   static const _iosInterstitial = 'ca-app-pub-XXXXXXXXXXXXXXXX/IIIIIIIIII';
@@ -35,8 +35,10 @@ abstract final class AdConfig {
   /// "Use RequestConfiguration.Builder().setTestDeviceIds(...)").
   static const testDeviceIds = <String>[];
 
-  static bool get _useTestAds =>
-      kDebugMode || _androidInterstitial.contains('XXXXXXXX');
+  /// Debug builds always get test ads. Release builds get real ads, except
+  /// on a platform whose IDs are still placeholders (iOS for now), which
+  /// falls back to test ads instead of requesting an invalid unit.
+  static bool _isPlaceholder(String id) => id.contains('XXXXXXXX');
 
   static String get banner => _pick(
     android: _androidBanner,
@@ -78,7 +80,10 @@ abstract final class AdConfig {
     required String testIos,
   }) {
     final isIos = !kIsWeb && Platform.isIOS;
-    if (_useTestAds) return isIos ? testIos : testAndroid;
-    return isIos ? ios : android;
+    final real = isIos ? ios : android;
+    if (kDebugMode || _isPlaceholder(real)) {
+      return isIos ? testIos : testAndroid;
+    }
+    return real;
   }
 }

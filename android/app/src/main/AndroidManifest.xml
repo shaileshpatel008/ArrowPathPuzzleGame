@@ -32,11 +32,10 @@
             </intent-filter>
         </activity>
 
-        <!-- AdMob App ID. TODO(before release): replace Google's TEST app id
-             with your own from AdMob > Apps > App settings. -->
+        <!-- AdMob App ID (AdMob > Apps > Arrow Path Puzzle > App settings). -->
         <meta-data
             android:name="com.google.android.gms.ads.APPLICATION_ID"
-            android:value="ca-app-pub-3940256099942544~3347511713"/>
+            android:value="ca-app-pub-7616025727863605~3469827240"/>
 
         <!-- Don't delete the meta-data below.
              This is used by the Flutter tool to generate GeneratedPluginRegistrant.java -->
